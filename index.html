@@ -3,6 +3,11 @@
 <body>
   <h3>Fetch WalletBot Data</h3>
   <pre id="output">Loading...</pre>
-  <script src="https://walletbot.me/scwapi/escrow/transactions/?format=html&callback=evil"></script>
+   <script>
+     let start = performance.now();
+     fetch("https://walletbot.me/scwapi/escrow/transactions/?format=html").then(() => {
+       console.log("Time:", performance.now() - start);
+     });
+   </script>
 </body>
 </html>
