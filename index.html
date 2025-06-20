@@ -1,20 +1,43 @@
 <!DOCTYPE html>
 <html>
-  <body>
-    <script>
-      fetch("https://walletbot.me/scwapi/escrow/transactions/", {
-        credentials: "include",
-        mode: "cors",
+<head>
+  <title>Send JSON as text/html test</title>
+</head>
+<body>
+  <h2>Send POST Request to Server</h2>
+
+  <form id="registerForm">
+    <label>Name: <input type="text" id="name" required></label><br>
+    <label>Password: <input type="password" id="password" required></label><br>
+    <button type="submit">Submit</button>
+  </form>
+
+  <pre id="output"></pre>
+
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const data = {
+        name: document.getElementById('name').value,
+        password: document.getElementById('password').value
+      };
+
+      fetch('http://localhost:3001/register/paitent', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        mode: 'no-cors',
         headers: {
-          "Origin": "https://evil.com"
+          'Content-Type': 'application/json'
         }
       })
-      .then(res => res.text())
-      .then(data => {
-        console.log("Fetched:", data);
-        document.write("<pre>" + data + "</pre>");
+      .then(res => {
+        document.getElementById('output').textContent = "Request sent. But response is blocked (opaque).";
       })
-      .catch(err => console.error("Fetch failed:", err));
-    </script>
-  </body>
+      .catch(err => {
+        document.getElementById('output').textContent = "Error: " + err;
+      });
+    });
+  </script>
+</body>
 </html>
