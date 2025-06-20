@@ -1,43 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Send JSON as text/html test</title>
+  <title>Test POST to WalletBot</title>
 </head>
 <body>
-  <h2>Send POST Request to Server</h2>
+  <h2>Try Sending POST to walletbot.me</h2>
 
-  <form id="registerForm">
-    <label>Name: <input type="text" id="name" required></label><br>
-    <label>Password: <input type="password" id="password" required></label><br>
-    <button type="submit">Submit</button>
-  </form>
-
-  <pre id="output"></pre>
+  <button onclick="sendData()">Send Request</button>
 
   <script>
-    document.getElementById('registerForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-
+    function sendData() {
       const data = {
-        name: document.getElementById('name').value,
-        password: document.getElementById('password').value
+        test: "test value"
       };
 
-      fetch('http://localhost:3001/register/paitent', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        mode: 'no-cors',
+      fetch("https://walletbot.me/scwapi/escrow/transactions", {
+        method: "POST",
+        mode: "no-cors", // bypass CORS error, but can't read response
+        credentials: "include",
         headers: {
-          'Content-Type': 'application/json'
-        }
+          "Content-Type": "application/json"
+          // ⚠️ You CANNOT add Authorization here with no-cors
+        },
+        body: JSON.stringify(data)
       })
       .then(res => {
-        document.getElementById('output').textContent = "Request sent. But response is blocked (opaque).";
+        console.log("Request sent (opaque response).");
       })
       .catch(err => {
-        document.getElementById('output').textContent = "Error: " + err;
+        console.error("Fetch error:", err);
       });
-    });
+    }
   </script>
 </body>
 </html>
