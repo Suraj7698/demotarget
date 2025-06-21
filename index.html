@@ -1,14 +1,28 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Test WalletBot JS</title>
-</head>
-<body>
-  <h2>Testing External JS Inclusion</h2>
+  <body>
+    <h2>Testing WalletBot API with Token</h2>
+    <pre id="output">Loading...</pre>
 
-  <script src="https://walletbot.me/static/js/vendors-f82e0cd2.81669d8a57.js#%22);alert(1);//">
-
-  <p>If the script loads and runs, you may see output in the console or unexpected behavior.</p>
-</body>
+    <script>
+      fetch("https://walletbot.me/scwapi/escrow/transactions?perPage=1", {
+        method: "GET",
+        headers: {
+          "Accept": "application/json",
+          "Wallet-Authorization": "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo2NDc1ODg5LCJ3ZWJfdmlld19pbml0X2RhdGEiOnsicXVlcnlfaWQiOm51bGwsInVzZXIiOnsiaWQiOjE2MjQ2MzM2NjMsImlzX2JvdCI6bnVsbCwiZmlyc3RfbmFtZSI6IktpeW90YWthIiwibGFzdF9uYW1lIjoiQXlhbm9rb2ppIiwidXNlcm5hbWUiOiJzdXJhanBhd2FyNjYyMSIsImxhbmd1YWdlX2NvZGUiOiJlbiIsImFsbG93c193cml0ZV90b19wbSI6dHJ1ZSwicGhvdG9fdXJsIjoiaHR0cHM6Ly90Lm1lL2kvdXNlcnBpYy8zMjAvbXRrQkR2b19DNmFyNjBkLXJfNnZrQUo5S1ZzTWUxSERwS2dFZU82d3E0cy5zdmciLCJhZGRlZF90b19hdHRhY2htZW50X21lbnUiOnRydWUsImlzX3ByZW1pdW0iOm51bGx9LCJyZWNlaXZlciI6bnVsbCwic3RhcnRfcGFyYW0iOm51bGwsImF1dGhfZGF0ZSI6MTc1MDUwNDU1MywiaGFzaCI6IjY4ODJmZmFlMmM3ODlhMWU3M2I5ZjdkMWUyNDdmMmFkODUxOGU1OWVkMzdlNGFlMDBiZDE0ODNlMGQyNDgzNWUiLCJjb3VudHJ5X2NvZGVfYnlfaXAiOiJJTiIsImlwIjoiNTkuMTUyLjEyMS4xODMiLCJ0Z191c2VyX2lkIjo2NDcwNTUzfSwid2FsbGV0X2RhdGEiOnsidXNlciI6eyJsb2NhbF9jdXJyZW5jeSI6IlVTRCIsImJvdF9sYW5ndWFnZSI6ImVuIn19LCJtYWluX2RhdGEiOm51bGwsImV4cCI6MTc1MDUwNTE1NCwidmVyc2lvbiI6Mn0.pqI99zMAsuXc4mL8NTZH89QmhkgettrHR3aY97mvNdxAu0r8zclzJbQZar9WqMFCTfFxt1fM4v7oxEFmD3SUjA"
+        },
+        credentials: "include", // optional if the API requires cookie/session
+        mode: "cors"
+      })
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("output").textContent = data;
+        console.log("API Response:", data);
+      })
+      .catch(err => {
+        console.error("Request failed:", err);
+        document.getElementById("output").textContent = "Fetch failed: " + err;
+      });
+    </script>
+  </body>
 </html>
-
