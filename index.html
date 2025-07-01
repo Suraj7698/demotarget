@@ -2,15 +2,21 @@
 <html>
   <head><title>XSS Test</title></head>
   <body>
-    <h1>Bankai</h1>
-<script>
-  const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
-  if (user?.first_name) {
-    const p = document.createElement("p");
-    p.innerHTML = `Welcome, ${user.first_name}`;
-    document.body.appendChild(p);
-  }
-</script>
-
+    <h1>Hello</h1>
+    <script>
+      // Wait until DOM is loaded before accessing Telegram
+      window.addEventListener("DOMContentLoaded", () => {
+        const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
+        if (user?.first_name) {
+          const p = document.createElement("p");
+          p.innerHTML = `Welcome, ${user.first_name}`;
+          document.body.appendChild(p);
+          console.log("[DEBUG] Inserted HTML:", p.innerHTML);
+        } else {
+          console.log("[DEBUG] No user or first_name");
+        }
+      });
+    </script>
   </body>
 </html>
+
