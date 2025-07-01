@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html>
-  <head><title>XSS Test</title></head>
+  <head><title>Mini App Debug</title></head>
   <body>
-    <h1>Hello</h1>
+    <h1>Hello from Mini App</h1>
+    <pre id="log" style="white-space: pre-wrap; color: green;"></pre>
 
     <script>
       window.addEventListener("DOMContentLoaded", () => {
+        const log = document.getElementById("log");
         const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
 
         if (user?.first_name) {
-          document.body.innerHTML += `<p>Welcome, ${user.first_name}</p>`;
+          const payload = `Welcome, ${user.first_name}`;
+          log.textContent = payload;
+          document.body.innerHTML += `<p>${payload}</p>`;
         } else {
-          console.log("[DEBUG] No user or first_name");
+          log.textContent = "[DEBUG] No user or first_name.\n" + JSON.stringify(window.Telegram?.WebApp?.initDataUnsafe, null, 2);
         }
       });
     </script>
   </body>
 </html>
-
-
