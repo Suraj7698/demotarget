@@ -3,13 +3,14 @@
   <head><title>XSS Test</title></head>
   <body>
     <h1>Hello</h1>
-    <script>
-      const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
-      if (user?.first_name) {
-        const p = document.createElement("p");
-        p.innerHTML = `Welcome, ${user.first_name}`;
-        document.body.appendChild(p);
-      }
-    </script>
+<script>
+  const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
+  if (user?.first_name) {
+    const p = document.createElement("p");
+    p.innerHTML = `Welcome, ${user.first_name}`;
+    document.body.appendChild(p);
+  }
+</script>
+
   </body>
 </html>
